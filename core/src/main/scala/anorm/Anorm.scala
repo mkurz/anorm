@@ -148,7 +148,7 @@ private[anorm] trait Sql extends WithResult {
   @SuppressWarnings(Array("TryGet" /* TODO: Make it safer */ ))
   def executeInsert[A](generatedKeysParser: ResultSetParser[A] = SqlParser.scalar[Long].singleOpt)(implicit
       connection: Connection
-  ): A = execInsert[A](preparedStatement(_, true), generatedKeysParser, ColumnAliaser.empty).get
+  ): A = execInsert[A](preparedStatement(_, getGeneratedKeys = true), generatedKeysParser, ColumnAliaser.empty).get
 
   /**
    * Executes this SQL as an insert statement.

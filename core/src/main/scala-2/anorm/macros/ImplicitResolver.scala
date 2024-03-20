@@ -61,10 +61,10 @@ object ImplicitResolver {
           replacement: Type,
           altered: Boolean
       ): (Type, Boolean) = in match {
-        case tpe :: ts =>
-          boundTypes.getOrElse(tpe.typeSymbol.fullName, tpe) match {
+        case innerTpe :: ts =>
+          boundTypes.getOrElse(innerTpe.typeSymbol.fullName, innerTpe) match {
             case t if filter(t) =>
-              refactor(ts, base, replacement :: out, tail, filter, replacement, true)
+              refactor(ts, base, replacement :: out, tail, filter, replacement, altered = true)
 
             case TypeRef(_, sym, as) if as.nonEmpty =>
               refactor(as, sym.asType, List.empty, (ts, base, out) :: tail, filter, replacement, altered)
@@ -94,7 +94,7 @@ object ImplicitResolver {
             PlaceholderType -> true
 
           case TypeRef(_, sym, args) if args.nonEmpty =>
-            refactor(args, sym.asType, List.empty, List.empty, _ =:= tpe, PlaceholderType, false)
+            refactor(args, sym.asType, List.empty, List.empty, _ =:= tpe, PlaceholderType, altered = false)
 
           case t => t -> false
         }
@@ -104,7 +104,7 @@ object ImplicitResolver {
         case PlaceholderType => tpe
 
         case TypeRef(_, sym, args) =>
-          refactor(args, sym.asType, List.empty, List.empty, _ == PlaceholderType, tpe, false)._1
+          refactor(args, sym.asType, List.empty, List.empty, _ == PlaceholderType, tpe, altered = false)._1
 
         case _ => ptype
       }
