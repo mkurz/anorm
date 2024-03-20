@@ -29,7 +29,7 @@ val common = Seq(
       case _             => Seq.empty
     }),
   javacOptions ++= Seq("-encoding", "UTF-8", "-Xlint:-options"),
-)
+) ++ Header.settings
 
 lazy val acolyteVersion = "1.2.9"
 lazy val acolyte        = "org.eu.acolyte" %% "jdbc-scala" % acolyteVersion % Test

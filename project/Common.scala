@@ -98,18 +98,7 @@ object Common extends AutoPlugin {
     scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
     Test / fork           := true,
     mimaPreviousArtifacts := previousVersion.map(organization.value %% moduleName.value % _).toSet,
-    headerLicense := Some(
-      HeaderLicense.Custom(
-        "Copyright (C) from 2022 The Play Framework Contributors <https://github.com/playframework>, 2011-2021 Lightbend Inc. <https://www.lightbend.com>"
-      )
-    ),
-    headerMappings ++= Map(
-      FileType("sbt")        -> HeaderCommentStyle.cppStyleLineComment,
-      FileType("properties") -> HeaderCommentStyle.hashLineComment,
-      FileType.xml           -> HeaderCommentStyle.xmlStyleBlockComment,
-      FileType("md") -> CommentStyle(new LineCommentCreator("<!---", "-->"), commentBetween("<!---", "*", "-->"))
-    ),
-  ) ++ Publish.settings
+  ) ++ Header.settings ++ Publish.settings
 
   @inline def missMeth(n: String) =
     ProblemFilters.exclude[MissingMethodProblem](n)
